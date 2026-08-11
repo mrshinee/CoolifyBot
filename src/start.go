@@ -11,16 +11,23 @@ import (
 func startHandler(m *telegram.NewMessage) error {
 	bot := m.Client.Me()
 	response := fmt.Sprintf(`
-👋 Hello <b>%s</b>!
+🌟 <b>ʜᴇʏ, %s!</b>
 
-Welcome to <b>%s</b> — your assistant to manage Coolify projects.
+ʏᴏᴜ'ᴠᴇ ʀᴇᴀᴄʜᴇᴅ <b>%s</b> — ʏᴏᴜʀ ꜱᴍᴀʀᴛ ᴄᴏɴᴛʀᴏʟ ᴘᴀɴᴇʟ ꜰᴏʀ ᴍᴀɴᴀɢɪɴɢ <b>ᴄᴏᴏʟɪꜰʏ</b> ᴘʀᴏᴊᴇᴄᴛꜱ ᴅɪʀᴇᴄᴛʟʏ ꜰʀᴏᴍ ᴛᴇʟᴇɢʀᴀᴍ.
 
-Use the menu below to get started.`, m.Sender.FirstName, bot.FirstName)
+<blockquote>⚡ ᴅᴇᴘʟᴏʏ · 🔄 ʀᴇꜱᴛᴀʀᴛ · 📋 ᴍᴀɴᴀɢᴇ — ᴀʟʟ ɪɴ ᴏɴᴇ ᴘʟᴀᴄᴇ.</blockquote>
+
+ᴛᴀᴘ ᴛʜᴇ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ ᴛᴏ ɢᴇᴛ ꜱᴛᴀʀᴛᴇᴅ 👇`, m.Sender.FirstName, bot.FirstName)
 
 	keyboard := telegram.NewKeyboard().
-		AddRow(telegram.Button.Data("📋 List Projects", "list_projects")).
-		AddRow(telegram.Button.URL("💫 Fᴀʟʟᴇɴ Pʀᴏᴊᴇᴄᴛꜱ", "https://t.me/FallenProjects")).
-		AddRow(telegram.Button.URL("🛠️ Sᴏᴜʀᴄᴇ Cᴏᴅᴇ", "https://github.com/AshokShau/coolify-telegram-bot"))
+		AddRow(
+			telegram.Button.Data("📋 ʟɪꜱᴛ ᴘʀᴏᴊᴇᴄᴛꜱ", "list_projects"),
+		).
+		AddRow(
+			telegram.Button.URL("💫 Uᴘᴅᴀᴛᴇs", "https://t.me/DynamicXNetwork"),
+			telegram.Button.URL("🛠️ Mᴀɪɴᴛᴀɪɴᴇʀ", "https://t.me/NullXShadow"),
+		)
+
 	_, err := m.Reply(response, &telegram.SendOptions{
 		ReplyMarkup: keyboard.Build(),
 	})
@@ -31,7 +38,7 @@ func pingHandler(m *telegram.NewMessage) error {
 	start := time.Now()
 	updateLag := time.Since(time.Unix(int64(m.Date()), 0)).Milliseconds()
 
-	msg, err := m.Reply("⏱️ Pinging...")
+	msg, err := m.Reply("⏱️ ᴘɪɴɢɪɴɢ...")
 	if err != nil {
 		return err
 	}
@@ -40,11 +47,11 @@ func pingHandler(m *telegram.NewMessage) error {
 	uptime := time.Since(startTime).Truncate(time.Second)
 
 	response := fmt.Sprintf(
-		"<b>📊 System Performance Metrics</b>\n\n"+
-			"⏱️ <b>Bot Latency:</b> <code>%d ms</code>\n"+
-			"🕒 <b>Uptime:</b> <code>%s</code>\n"+
-			"📩 <b>Update Lag:</b> <code>%d ms</code>\n"+
-			"⚙️ <b>Go Routines:</b> <code>%d</code>\n",
+		"<b>📊 ꜱʏꜱᴛᴇᴍ ᴘᴇʀꜰᴏʀᴍᴀɴᴄᴇ ᴍᴇᴛʀɪᴄꜱ</b>\n\n"+
+			"⏱️ <b>ʙᴏᴛ ʟᴀᴛᴇɴᴄʏ:</b> <code>%d ms</code>\n"+
+			"🕒 <b>ᴜᴘᴛɪᴍᴇ:</b> <code>%s</code>\n"+
+			"📩 <b>ᴜᴘᴅᴀᴛᴇ ʟᴀɢ:</b> <code>%d ms</code>\n"+
+			"⚙️ <b>ɢᴏ ʀᴏᴜᴛɪɴᴇꜱ:</b> <code>%d</code>\n",
 		latency, uptime, updateLag, runtime.NumGoroutine(),
 	)
 
