@@ -12,7 +12,7 @@ import (
 
 func unscheduleHandler(m *telegram.NewMessage) error {
 	if !config.IsDev(m.Sender.ID) {
-		_, err := m.Reply("🚫 You are not authorized to use this command.")
+		_, err := m.Reply("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴛᴏ ᴜꜱᴇ ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ.")
 		return err
 	}
 
@@ -25,14 +25,14 @@ func unscheduleHandler(m *telegram.NewMessage) error {
 	taskID := args[1]
 
 	if err := scheduler.RemoveTask(taskID); err != nil {
-		_, err = m.Reply(fmt.Sprintf("⚠️ Warning: Could not remove task from scheduler (might not be running): %v", err))
+		_, err = m.Reply(fmt.Sprintf("⚠️ ᴡᴀʀɴɪɴɢ: ᴄᴏᴜʟᴅ ɴᴏᴛ ʀᴇᴍᴏᴠᴇ ᴛᴀꜱᴋ ꜰʀᴏᴍ ꜱᴄʜᴇᴅᴜʟᴇʀ (ᴍɪɢʜᴛ ɴᴏᴛ ʙᴇ ʀᴜɴɴɪɴɢ): %v", err))
 	}
 	
 	if err := database.DeleteTask(taskID); err != nil {
-		_, err = m.Reply(fmt.Sprintf("❌ Error deleting task from database: %v", err))
+		_, err = m.Reply(fmt.Sprintf("❌ ᴇʀʀᴏʀ ᴅᴇʟᴇᴛɪɴɢ ᴛᴀꜱᴋ ꜰʀᴏᴍ ᴅᴀᴛᴀʙᴀꜱᴇ: %v", err))
 		return err
 	}
 
-	_, err := m.Reply(fmt.Sprintf("✅ Task <code>%s</code> removed successfully.", taskID))
+	_, err := m.Reply(fmt.Sprintf("✅ ᴛᴀꜱᴋ <code>%s</code> ʀᴇᴍᴏᴠᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ.", taskID))
 	return err
 }

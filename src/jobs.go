@@ -13,7 +13,7 @@ const pageSize = 5
 
 func jobsHandler(m *telegram.NewMessage) error {
 	if !config.IsDev(m.Sender.ID) {
-		_, err := m.Reply("🚫 You are not authorized to use this command.")
+		_, err := m.Reply("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴛᴏ ᴜꜱᴇ ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ.")
 		return err
 	}
 
@@ -29,7 +29,7 @@ func jobsHandler(m *telegram.NewMessage) error {
 
 func jobsPaginationHandler(cb *telegram.CallbackQuery) error {
 	if !config.IsDev(cb.SenderID) {
-		_, _ = cb.Answer("🚫 You are not authorized.", &telegram.CallbackOptions{Alert: true})
+		_, _ = cb.Answer("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", &telegram.CallbackOptions{Alert: true})
 		return nil
 	}
 
@@ -41,7 +41,7 @@ func jobsPaginationHandler(cb *telegram.CallbackQuery) error {
 
 	text, kb, err := buildJobsMessage(page)
 	if err != nil {
-		_, _ = cb.Answer("Error: "+err.Error(), &telegram.CallbackOptions{Alert: true})
+		_, _ = cb.Answer("ᴇʀʀᴏʀ: "+err.Error(), &telegram.CallbackOptions{Alert: true})
 		return nil
 	}
 
@@ -56,21 +56,21 @@ func buildJobsMessage(page int) (string, telegram.ReplyMarkup, error) {
 	}
 
 	if len(tasks) == 0 {
-		return "📭 No scheduled jobs found.", nil, nil
+		return "📭 ɴᴏ ꜱᴄʜᴇᴅᴜʟᴇᴅ ᴊᴏʙꜱ ꜰᴏᴜɴᴅ.", nil, nil
 	}
 
 	start, end, buttons := Paginate(len(tasks), page, pageSize, "jobs:")
 
 	var sb strings.Builder
-	sb.WriteString(fmt.Sprintf("<b>📅 Scheduled Jobs (Page %d):</b>\n\n", page))
+	sb.WriteString(fmt.Sprintf("<b>📅 ꜱᴄʜᴇᴅᴜʟᴇᴅ ᴊᴏʙꜱ (ᴘᴀɢᴇ %d):</b>\n\n", page))
 
 	for _, task := range tasks[start:end] {
 		sb.WriteString(fmt.Sprintf("🆔 <code>%s</code>\n", task.ID.Hex()))
-		sb.WriteString(fmt.Sprintf("🏷️ <b>Name:</b> %s\n", task.Name))
-		sb.WriteString(fmt.Sprintf("🔧 <b>Type:</b> %s\n", task.Type))
-		sb.WriteString(fmt.Sprintf("⏰ <b>Schedule:</b> %s\n", task.Schedule))
+		sb.WriteString(fmt.Sprintf("🏷️ <b>ɴᴀᴍᴇ:</b> %s\n", task.Name))
+		sb.WriteString(fmt.Sprintf("🔧 <b>ᴛʏᴘᴇ:</b> %s\n", task.Type))
+		sb.WriteString(fmt.Sprintf("⏰ <b>ꜱᴄʜᴇᴅᴜʟᴇ:</b> %s\n", task.Schedule))
 		if task.OneTime {
-			sb.WriteString(fmt.Sprintf("⏳ <b>Next Run:</b> %s\n", task.NextRun.Format("2006-01-02 15:04:05")))
+			sb.WriteString(fmt.Sprintf("⏳ <b>ɴᴇxᴛ ʀᴜɴ:</b> %s\n", task.NextRun.Format("2006-01-02 15:04:05")))
 		}
 		sb.WriteString("➖➖➖➖➖➖➖➖➖➖\n")
 	}

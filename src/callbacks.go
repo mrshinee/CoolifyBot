@@ -14,18 +14,18 @@ import (
 
 func listProjectsHandler(cb *telegram.CallbackQuery) error {
 	if !config.IsDev(cb.SenderID) {
-		_, _ = cb.Answer("🚫 You are not authorized.", &telegram.CallbackOptions{Alert: true})
+		_, _ = cb.Answer("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", &telegram.CallbackOptions{Alert: true})
 		return nil
 	}
-	_, _ = cb.Answer("Processing...")
+	_, _ = cb.Answer("ᴘʀᴏᴄᴇꜱꜱɪɴɢ...")
 	apps, err := config.Coolify.ListApplications()
 	if err != nil {
-		_, _ = cb.Edit("❌ Failed to fetch projects:" + err.Error())
+		_, _ = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ꜰᴇᴛᴄʜ ᴘʀᴏᴊᴇᴄᴛꜱ:" + err.Error())
 		return nil
 	}
 
 	if len(apps) == 0 {
-		_, _ = cb.Edit("😶 No applications found.")
+		_, _ = cb.Edit("😶 ɴᴏ ᴀᴘᴘʟɪᴄᴀᴛɪᴏɴꜱ ꜰᴏᴜɴᴅ.")
 		return nil
 	}
 
@@ -54,32 +54,32 @@ func listProjectsHandler(cb *telegram.CallbackQuery) error {
 		kb.AddRow(row...)
 	}
 
-	_, err = cb.Edit("<b>📋 Select a project:</b>", &telegram.SendOptions{ReplyMarkup: kb.Build()})
+	_, err = cb.Edit("<b>📋 ꜱᴇʟᴇᴄᴛ ᴀ ᴘʀᴏᴊᴇᴄᴛ:</b>", &telegram.SendOptions{ReplyMarkup: kb.Build()})
 	return err
 }
 
 func projectMenuHandler(cb *telegram.CallbackQuery) error {
 	if !config.IsDev(cb.SenderID) {
-		_, _ = cb.Answer("🚫 You are not authorized.", &telegram.CallbackOptions{Alert: true})
+		_, _ = cb.Answer("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", &telegram.CallbackOptions{Alert: true})
 		return nil
 	}
 
-	_, _ = cb.Answer("Processing...")
+	_, _ = cb.Answer("ᴘʀᴏᴄᴇꜱꜱɪɴɢ...")
 	uuid := strings.TrimPrefix(cb.DataString(), "project_menu:")
 
 	app, err := config.Coolify.GetApplicationByUUID(uuid)
 	if err != nil {
-		_, err = cb.Edit("❌ Failed to load project: "+err.Error(), nil)
+		_, err = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ʟᴏᴀᴅ ᴘʀᴏᴊᴇᴄᴛ: "+err.Error(), nil)
 		return err
 	}
 
-	text := fmt.Sprintf("<b>📦 %s</b>\n🌐 %s\n📄 Status: <code>%s</code>", app.Name, app.FQDN, app.Status)
+	text := fmt.Sprintf("<b>📦 %s</b>\n🌐 %s\n📄 ꜱᴛᴀᴛᴜꜱ: <code>%s</code>", app.Name, app.FQDN, app.Status)
 	keyboard := telegram.NewKeyboard().
-		AddRow(telegram.Button.Data("🔄 Restart", "restart:"+uuid), telegram.Button.Data("🚀 Deploy", "deploy:"+uuid)).
-		AddRow(telegram.Button.Data("📜 Logs", "logs:"+uuid), telegram.Button.Data("ℹ️ Status", "status:"+uuid)).
-		AddRow(telegram.Button.Data("📅 Schedule", "sch_m:"+uuid)).
-		AddRow(telegram.Button.Data("🛑 Stop", "stop:"+uuid), telegram.Button.Data("❌ Delete", "delete:"+uuid)).
-		AddRow(telegram.Button.Data("🔙 Back", "list_projects:"))
+		AddRow(telegram.Button.Data("🔄 ʀᴇꜱᴛᴀʀᴛ", "restart:"+uuid), telegram.Button.Data("🚀 ᴅᴇᴘʟᴏʏ", "deploy:"+uuid)).
+		AddRow(telegram.Button.Data("📜 ʟᴏɢꜱ", "logs:"+uuid), telegram.Button.Data("ℹ️ ꜱᴛᴀᴛᴜꜱ", "status:"+uuid)).
+		AddRow(telegram.Button.Data("📅 ꜱᴄʜᴇᴅᴜʟᴇ", "sch_m:"+uuid)).
+		AddRow(telegram.Button.Data("🛑 ꜱᴛᴏᴘ", "stop:"+uuid), telegram.Button.Data("❌ ᴅᴇʟᴇᴛᴇ", "delete:"+uuid)).
+		AddRow(telegram.Button.Data("🔙 ʙᴀᴄᴋ", "list_projects:"))
 
 	_, err = cb.Edit(text, &telegram.SendOptions{
 		ParseMode:   "HTML",
@@ -90,59 +90,59 @@ func projectMenuHandler(cb *telegram.CallbackQuery) error {
 
 func restartHandler(cb *telegram.CallbackQuery) error {
 	if !config.IsDev(cb.SenderID) {
-		_, _ = cb.Answer("🚫 You are not authorized.", &telegram.CallbackOptions{Alert: true})
+		_, _ = cb.Answer("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", &telegram.CallbackOptions{Alert: true})
 		return nil
 	}
-	_, _ = cb.Answer("Processing...")
+	_, _ = cb.Answer("ᴘʀᴏᴄᴇꜱꜱɪɴɢ...")
 	uuid := strings.TrimPrefix(cb.DataString(), "restart:")
 
 	keyboard := telegram.NewKeyboard().
-		AddRow(telegram.Button.Data("🔙 Back", "project_menu:"+uuid))
+		AddRow(telegram.Button.Data("🔙 ʙᴀᴄᴋ", "project_menu:"+uuid))
 
 	res, err := config.Coolify.RestartApplicationByUUID(uuid)
 	if err != nil {
-		_, _ = cb.Edit("❌ Restart failed: "+err.Error(), &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
+		_, _ = cb.Edit("❌ ʀᴇꜱᴛᴀʀᴛ ꜰᴀɪʟᴇᴅ: "+err.Error(), &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
 		return nil
 	}
 
-	text := fmt.Sprintf("✅ Restart queued!\nDeployment UUID: <code>%s</code>", res.DeploymentUUID)
+	text := fmt.Sprintf("✅ ʀᴇꜱᴛᴀʀᴛ ǫᴜᴇᴜᴇᴅ!\nᴅᴇᴘʟᴏʏᴍᴇɴᴛ ᴜᴜɪᴅ: <code>%s</code>", res.DeploymentUUID)
 	_, err = cb.Edit(text, &telegram.SendOptions{ParseMode: "HTML", ReplyMarkup: keyboard.Build()})
 	return err
 }
 
 func deployHandler(cb *telegram.CallbackQuery) error {
 	if !config.IsDev(cb.SenderID) {
-		_, _ = cb.Answer("🚫 You are not authorized.", &telegram.CallbackOptions{Alert: true})
+		_, _ = cb.Answer("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", &telegram.CallbackOptions{Alert: true})
 		return nil
 	}
-	_, _ = cb.Answer("Processing...")
+	_, _ = cb.Answer("ᴘʀᴏᴄᴇꜱꜱɪɴɢ...")
 	uuid := strings.TrimPrefix(cb.DataString(), "deploy:")
 	keyboard := telegram.NewKeyboard().
-		AddRow(telegram.Button.Data("🔙 Back", "project_menu:"+uuid))
+		AddRow(telegram.Button.Data("🔙 ʙᴀᴄᴋ", "project_menu:"+uuid))
 	res, err := config.Coolify.StartApplicationDeployment(uuid, false, false)
 	if err != nil {
-		_, _ = cb.Edit("❌ Deploy failed: "+err.Error(), &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
+		_, _ = cb.Edit("❌ ᴅᴇᴘʟᴏʏ ꜰᴀɪʟᴇᴅ: "+err.Error(), &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
 		return err
 	}
-	text := fmt.Sprintf("✅ Deployment queued!\nDeployment UUID: <code>%s</code>", res.DeploymentUUID)
+	text := fmt.Sprintf("✅ ᴅᴇᴘʟᴏʏᴍᴇɴᴛ ǫᴜᴇᴜᴇᴅ!\nᴅᴇᴘʟᴏʏᴍᴇɴᴛ ᴜᴜɪᴅ: <code>%s</code>", res.DeploymentUUID)
 	_, err = cb.Edit(text, &telegram.SendOptions{ParseMode: "HTML", ReplyMarkup: keyboard.Build()})
 	return err
 }
 
 func logsHandler(cb *telegram.CallbackQuery) error {
 	if !config.IsDev(cb.SenderID) {
-		_, _ = cb.Answer("🚫 You are not authorized.", &telegram.CallbackOptions{Alert: true})
+		_, _ = cb.Answer("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", &telegram.CallbackOptions{Alert: true})
 		return nil
 	}
-	_, _ = cb.Answer("Processing...")
+	_, _ = cb.Answer("ᴘʀᴏᴄᴇꜱꜱɪɴɢ...")
 	uuid := strings.TrimPrefix(cb.DataString(), "logs:")
 	keyboard := telegram.NewKeyboard().
-		AddRow(telegram.Button.Data("🔙 Back", "project_menu:"+uuid))
+		AddRow(telegram.Button.Data("🔙 ʙᴀᴄᴋ", "project_menu:"+uuid))
 
-	msg, _ := cb.Edit("Processing...")
+	msg, _ := cb.Edit("ᴘʀᴏᴄᴇꜱꜱɪɴɢ...")
 	logsData, err := config.Coolify.GetApplicationLogsByUUID(uuid)
 	if err != nil {
-		_, _ = cb.Edit("❌ Logs error: "+err.Error(), &telegram.SendOptions{
+		_, _ = cb.Edit("❌ ʟᴏɢꜱ ᴇʀʀᴏʀ: "+err.Error(), &telegram.SendOptions{
 			ReplyMarkup: keyboard.Build(),
 		})
 		return nil
@@ -150,13 +150,13 @@ func logsHandler(cb *telegram.CallbackQuery) error {
 
 	tmpFile, err := os.CreateTemp("", "logs-*.txt")
 	if err != nil {
-		_, _ = cb.Edit("❌ Failed to create temp file: "+err.Error(), nil)
+		_, _ = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ᴄʀᴇᴀᴛᴇ ᴛᴇᴍᴘ ꜰɪʟᴇ: "+err.Error(), nil)
 		return err
 	}
 
 	defer os.Remove(tmpFile.Name())
 	if _, err := tmpFile.Write([]byte(logsData)); err != nil {
-		_, _ = cb.Edit("❌ Failed to write logs: "+err.Error(), nil)
+		_, _ = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ᴡʀɪᴛᴇ ʟᴏɢꜱ: "+err.Error(), nil)
 		return err
 	}
 	tmpFile.Close()
@@ -183,7 +183,7 @@ func logsHandler(cb *telegram.CallbackQuery) error {
 	}
 	_, err = msg.Edit("LOGS", &opts)
 	if err != nil {
-		_, _ = cb.Edit("❌ Failed to send logs: "+err.Error(), &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
+		_, _ = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ꜱᴇɴᴅ ʟᴏɢꜱ: "+err.Error(), &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
 		return err
 	}
 
@@ -192,36 +192,36 @@ func logsHandler(cb *telegram.CallbackQuery) error {
 
 func statusHandler(cb *telegram.CallbackQuery) error {
 	if !config.IsDev(cb.SenderID) {
-		_, _ = cb.Answer("🚫 You are not authorized.", &telegram.CallbackOptions{Alert: true})
+		_, _ = cb.Answer("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", &telegram.CallbackOptions{Alert: true})
 		return nil
 	}
-	_, _ = cb.Answer("Processing...")
+	_, _ = cb.Answer("ᴘʀᴏᴄᴇꜱꜱɪɴɢ...")
 	uuid := strings.TrimPrefix(cb.DataString(), "status:")
 	keyboard := telegram.NewKeyboard().
-		AddRow(telegram.Button.Data("🔙 Back", "project_menu:"+uuid))
+		AddRow(telegram.Button.Data("🔙 ʙᴀᴄᴋ", "project_menu:"+uuid))
 	app, err := config.Coolify.GetApplicationByUUID(uuid)
 	if err != nil {
-		_, _ = cb.Edit("❌ Status error: "+err.Error(), &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
+		_, _ = cb.Edit("❌ ꜱᴛᴀᴛᴜꜱ ᴇʀʀᴏʀ: "+err.Error(), &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
 		return nil
 	}
 
-	text := fmt.Sprintf("📦 <b>%s</b>\nCurrent Status: <code>%s</code>", app.Name, app.Status)
+	text := fmt.Sprintf("📦 <b>%s</b>\nᴄᴜʀʀᴇɴᴛ ꜱᴛᴀᴛᴜꜱ: <code>%s</code>", app.Name, app.Status)
 	_, err = cb.Edit(text, &telegram.SendOptions{ParseMode: "HTML", ReplyMarkup: keyboard.Build()})
 	return err
 }
 
 func stopHandler(cb *telegram.CallbackQuery) error {
 	if !config.IsDev(cb.SenderID) {
-		_, _ = cb.Answer("🚫 You are not authorized.", &telegram.CallbackOptions{Alert: true})
+		_, _ = cb.Answer("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", &telegram.CallbackOptions{Alert: true})
 		return nil
 	}
-	_, _ = cb.Answer("Processing...")
+	_, _ = cb.Answer("ᴘʀᴏᴄᴇꜱꜱɪɴɢ...")
 	uuid := strings.TrimPrefix(cb.DataString(), "stop:")
 	res, err := config.Coolify.StopApplicationByUUID(uuid)
 	keyboard := telegram.NewKeyboard().
-		AddRow(telegram.Button.Data("🔙 Back", "project_menu:"+uuid))
+		AddRow(telegram.Button.Data("🔙 ʙᴀᴄᴋ", "project_menu:"+uuid))
 	if err != nil {
-		_, _ = cb.Edit("❌ Stop failed: "+err.Error(), &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
+		_, _ = cb.Edit("❌ ꜱᴛᴏᴘ ꜰᴀɪʟᴇᴅ: "+err.Error(), &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
 		return nil
 	}
 
@@ -231,37 +231,37 @@ func stopHandler(cb *telegram.CallbackQuery) error {
 
 func deleteHandler(cb *telegram.CallbackQuery) error {
 	if !config.IsDev(cb.SenderID) {
-		_, _ = cb.Answer("🚫 You are not authorized.", &telegram.CallbackOptions{Alert: true})
+		_, _ = cb.Answer("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", &telegram.CallbackOptions{Alert: true})
 		return nil
 	}
 
-	_, _ = cb.Answer("Processing...")
+	_, _ = cb.Answer("ᴘʀᴏᴄᴇꜱꜱɪɴɢ...")
 	uuid := strings.TrimPrefix(cb.DataString(), "delete:")
 	err := config.Coolify.DeleteApplicationByUUID(uuid)
 	keyboard := telegram.NewKeyboard().
-		AddRow(telegram.Button.Data("🔙 Back", "project_menu:"+uuid))
+		AddRow(telegram.Button.Data("🔙 ʙᴀᴄᴋ", "project_menu:"+uuid))
 	if err != nil {
-		_, err = cb.Edit("❌ Delete failed: "+err.Error(), &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
+		_, err = cb.Edit("❌ ᴅᴇʟᴇᴛᴇ ꜰᴀɪʟᴇᴅ: "+err.Error(), &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
 		return nil
 	}
 
-	_, err = cb.Edit("✅ Application deleted successfully.", &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
+	_, err = cb.Edit("✅ ᴀᴘᴘʟɪᴄᴀᴛɪᴏɴ ᴅᴇʟᴇᴛᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ.", &telegram.SendOptions{ReplyMarkup: keyboard.Build()})
 	return err
 }
 
 func scheduleMenuHandler(cb *telegram.CallbackQuery) error {
 	if !config.IsDev(cb.SenderID) {
-		_, _ = cb.Answer("🚫 You are not authorized.", &telegram.CallbackOptions{Alert: true})
+		_, _ = cb.Answer("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", &telegram.CallbackOptions{Alert: true})
 		return nil
 	}
-	_, _ = cb.Answer("Processing...")
+	_, _ = cb.Answer("ᴘʀᴏᴄᴇꜱꜱɪɴɢ...")
 	uuid := strings.TrimPrefix(cb.DataString(), "sch_m:")
 
 	keyboard := telegram.NewKeyboard().
-		AddRow(telegram.Button.Data("🔄 Restart", "sch_a:"+uuid+":restart")).
-		AddRow(telegram.Button.Data("🔙 Back", "project_menu:"+uuid))
+		AddRow(telegram.Button.Data("🔄 ʀᴇꜱᴛᴀʀᴛ", "sch_a:"+uuid+":restart")).
+		AddRow(telegram.Button.Data("🔙 ʙᴀᴄᴋ", "project_menu:"+uuid))
 
-	_, err := cb.Edit("<b>📅 Select Action Type:</b>", &telegram.SendOptions{
+	_, err := cb.Edit("<b>📅 ꜱᴇʟᴇᴄᴛ ᴀᴄᴛɪᴏɴ ᴛʏᴘᴇ:</b>", &telegram.SendOptions{
 		ParseMode:   "HTML",
 		ReplyMarkup: keyboard.Build(),
 	})
@@ -270,10 +270,10 @@ func scheduleMenuHandler(cb *telegram.CallbackQuery) error {
 
 func scheduleActionHandler(cb *telegram.CallbackQuery) error {
 	if !config.IsDev(cb.SenderID) {
-		_, _ = cb.Answer("🚫 You are not authorized.", &telegram.CallbackOptions{Alert: true})
+		_, _ = cb.Answer("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", &telegram.CallbackOptions{Alert: true})
 		return nil
 	}
-	_, _ = cb.Answer("Processing...")
+	_, _ = cb.Answer("ᴘʀᴏᴄᴇꜱꜱɪɴɢ...")
 	// Format: sch_a:uuid:actionType
 	data := strings.TrimPrefix(cb.DataString(), "sch_a:")
 	parts := strings.Split(data, ":")
@@ -285,14 +285,14 @@ func scheduleActionHandler(cb *telegram.CallbackQuery) error {
 
 	// Common intervals
 	keyboard := telegram.NewKeyboard().
-		AddRow(telegram.Button.Data("Hourly", fmt.Sprintf("sch_c:%s:%s:every_1h", uuid, actionType))).
-		AddRow(telegram.Button.Data("Daily", fmt.Sprintf("sch_c:%s:%s:every_1d", uuid, actionType))).
-		AddRow(telegram.Button.Data("Every 2 Days", fmt.Sprintf("sch_c:%s:%s:every_2d", uuid, actionType))).
-		AddRow(telegram.Button.Data("Every 3 Days", fmt.Sprintf("sch_c:%s:%s:every_3d", uuid, actionType))).
-		AddRow(telegram.Button.Data("Weekly", fmt.Sprintf("sch_c:%s:%s:every_7d", uuid, actionType))).
-		AddRow(telegram.Button.Data("🔙 Back", "sch_m:"+uuid))
+		AddRow(telegram.Button.Data("ʜᴏᴜʀʟʏ", fmt.Sprintf("sch_c:%s:%s:every_1h", uuid, actionType))).
+		AddRow(telegram.Button.Data("ᴅᴀɪʟʏ", fmt.Sprintf("sch_c:%s:%s:every_1d", uuid, actionType))).
+		AddRow(telegram.Button.Data("ᴇᴠᴇʀʏ 2 ᴅᴀʏꜱ", fmt.Sprintf("sch_c:%s:%s:every_2d", uuid, actionType))).
+		AddRow(telegram.Button.Data("ᴇᴠᴇʀʏ 3 ᴅᴀʏꜱ", fmt.Sprintf("sch_c:%s:%s:every_3d", uuid, actionType))).
+		AddRow(telegram.Button.Data("ᴡᴇᴇᴋʟʏ", fmt.Sprintf("sch_c:%s:%s:every_7d", uuid, actionType))).
+		AddRow(telegram.Button.Data("🔙 ʙᴀᴄᴋ", "sch_m:"+uuid))
 
-	_, err := cb.Edit("<b>⏰ Select Schedule:</b>", &telegram.SendOptions{
+	_, err := cb.Edit("<b>⏰ ꜱᴇʟᴇᴄᴛ ꜱᴄʜᴇᴅᴜʟᴇ:</b>", &telegram.SendOptions{
 		ParseMode:   "HTML",
 		ReplyMarkup: keyboard.Build(),
 	})
@@ -301,10 +301,10 @@ func scheduleActionHandler(cb *telegram.CallbackQuery) error {
 
 func scheduleCreateHandler(cb *telegram.CallbackQuery) error {
 	if !config.IsDev(cb.SenderID) {
-		_, _ = cb.Answer("🚫 You are not authorized.", &telegram.CallbackOptions{Alert: true})
+		_, _ = cb.Answer("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", &telegram.CallbackOptions{Alert: true})
 		return nil
 	}
-	_, _ = cb.Answer("Scheduling...")
+	_, _ = cb.Answer("ꜱᴄʜᴇᴅᴜʟɪɴɢ...")
 	// Format: sch_c:uuid:actionType:schedule
 	data := strings.TrimPrefix(cb.DataString(), "sch_c:")
 	parts := strings.Split(data, ":")
@@ -317,7 +317,7 @@ func scheduleCreateHandler(cb *telegram.CallbackQuery) error {
 
 	app, err := config.Coolify.GetApplicationByUUID(uuid)
 	if err != nil {
-		_, _ = cb.Edit("❌ Failed to get application: " + err.Error())
+		_, _ = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ɢᴇᴛ ᴀᴘᴘʟɪᴄᴀᴛɪᴏɴ: " + err.Error())
 		return nil
 	}
 
@@ -330,20 +330,20 @@ func scheduleCreateHandler(cb *telegram.CallbackQuery) error {
 	}
 
 	if err := database.AddTask(task); err != nil {
-		_, _ = cb.Edit("❌ Failed to save task: " + err.Error())
+		_, _ = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ꜱᴀᴠᴇ ᴛᴀꜱᴋ: " + err.Error())
 		return nil
 	}
 
 	if err := scheduler.ScheduleTask(task); err != nil {
 		_ = database.DeleteTask(task.ID.Hex())
-		_, _ = cb.Edit("❌ Failed to schedule task: " + err.Error())
+		_, _ = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ꜱᴄʜᴇᴅᴜʟᴇ ᴛᴀꜱᴋ: " + err.Error())
 		return nil
 	}
 
 	keyboard := telegram.NewKeyboard().
-		AddRow(telegram.Button.Data("🔙 Back", "project_menu:"+uuid))
+		AddRow(telegram.Button.Data("🔙 ʙᴀᴄᴋ", "project_menu:"+uuid))
 
-	_, err = cb.Edit(fmt.Sprintf("✅ Task scheduled successfully!\n\nID: <code>%s</code>\nType: %s\nSchedule: %s", task.ID.Hex(), actionType, schedule), &telegram.SendOptions{
+	_, err = cb.Edit(fmt.Sprintf("✅ ᴛᴀꜱᴋ ꜱᴄʜᴇᴅᴜʟᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ!\n\nɪᴅ: <code>%s</code>\nᴛʏᴘᴇ: %s\nꜱᴄʜᴇᴅᴜʟᴇ: %s", task.ID.Hex(), actionType, schedule), &telegram.SendOptions{
 		ParseMode:   "HTML",
 		ReplyMarkup: keyboard.Build(),
 	})

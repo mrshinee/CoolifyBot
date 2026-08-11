@@ -15,7 +15,7 @@ import (
 
 func scheduleHandler(m *telegram.NewMessage) error {
 	if !config.IsDev(m.Sender.ID) {
-		_, err := m.Reply("🚫 You are not authorized to use this command.")
+		_, err := m.Reply("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴛᴏ ᴜꜱᴇ ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ.")
 		return err
 	}
 
@@ -32,7 +32,7 @@ func scheduleHandler(m *telegram.NewMessage) error {
 
 	apps, err := config.Coolify.ListApplications()
 	if err != nil {
-		_, err = m.Reply(fmt.Sprintf("❌ Error fetching projects: %v", err))
+		_, err = m.Reply(fmt.Sprintf("❌ ᴇʀʀᴏʀ ꜰᴇᴛᴄʜɪɴɢ ᴘʀᴏᴊᴇᴄᴛꜱ: %v", err))
 		return err
 	}
 
@@ -45,7 +45,7 @@ func scheduleHandler(m *telegram.NewMessage) error {
 	}
 
 	if uuid == "" {
-		_, err = m.Reply(fmt.Sprintf("❌ Project not found with name: %s", name))
+		_, err = m.Reply(fmt.Sprintf("❌ ᴘʀᴏᴊᴇᴄᴛ ɴᴏᴛ ꜰᴏᴜɴᴅ ᴡɪᴛʜ ɴᴀᴍᴇ: %s", name))
 		return err
 	}
 
@@ -59,17 +59,17 @@ func scheduleHandler(m *telegram.NewMessage) error {
 	switch schType {
 	case "one_time":
 		if len(args) < 4 {
-			_, err = m.Reply("❌ Please provide a time for one-time schedule.")
+			_, err = m.Reply("❌ ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴛɪᴍᴇ ꜰᴏʀ ᴏɴᴇ-ᴛɪᴍᴇ ꜱᴄʜᴇᴅᴜʟᴇ.")
 			return err
 		}
 		timeStr := args[3]
 		t, err := time.Parse(time.RFC3339, timeStr)
 		if err != nil {
-			_, err = m.Reply("❌ Invalid time format. Use RFC3339 (e.g., 2023-10-27T10:00:00Z)")
+			_, err = m.Reply("❌ ɪɴᴠᴀʟɪᴅ ᴛɪᴍᴇ ꜰᴏʀᴍᴀᴛ. ᴜꜱᴇ RFC3339 (e.g., 2023-10-27T10:00:00Z)")
 			return err
 		}
 		if t.Before(time.Now()) {
-			_, err = m.Reply("❌ Time must be in the future.")
+			_, err = m.Reply("❌ ᴛɪᴍᴇ ᴍᴜꜱᴛ ʙᴇ ɪɴ ᴛʜᴇ ꜰᴜᴛᴜʀᴇ.")
 			return err
 		}
 		task.OneTime = true
@@ -78,7 +78,7 @@ func scheduleHandler(m *telegram.NewMessage) error {
 
 	case "cron":
 		if len(args) < 4 {
-			_, err = m.Reply("❌ Please provide a cron expression.")
+			_, err = m.Reply("❌ ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴄʀᴏɴ ᴇxᴘʀᴇꜱꜱɪᴏɴ.")
 			return err
 		}
 
@@ -106,21 +106,21 @@ func scheduleHandler(m *telegram.NewMessage) error {
 			break
 		}
 
-		_, err = m.Reply(fmt.Sprintf("❌ Unknown schedule type: %s", schType))
+		_, err = m.Reply(fmt.Sprintf("❌ ᴜɴᴋɴᴏᴡɴ ꜱᴄʜᴇᴅᴜʟᴇ ᴛʏᴘᴇ: %s", schType))
 		return err
 	}
 
 	if err := database.AddTask(task); err != nil {
-		_, err = m.Reply(fmt.Sprintf("❌ Error saving task: %v", err))
+		_, err = m.Reply(fmt.Sprintf("❌ ᴇʀʀᴏʀ ꜱᴀᴠɪɴɢ ᴛᴀꜱᴋ: %v", err))
 		return err
 	}
 
 	if err := scheduler.ScheduleTask(task); err != nil {
 		_ = database.DeleteTask(task.ID.Hex())
-		_, err = m.Reply(fmt.Sprintf("❌ Error scheduling task: %v", err))
+		_, err = m.Reply(fmt.Sprintf("❌ ᴇʀʀᴏʀ ꜱᴄʜᴇᴅᴜʟɪɴɢ ᴛᴀꜱᴋ: %v", err))
 		return err
 	}
 
-	_, err = m.Reply(fmt.Sprintf("✅ Task scheduled successfully!\nID: %s", task.ID.Hex()))
+	_, err = m.Reply(fmt.Sprintf("✅ ᴛᴀꜱᴋ ꜱᴄʜᴇᴅᴜʟᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ!\nɪᴅ: %s", task.ID.Hex()))
 	return err
 }
