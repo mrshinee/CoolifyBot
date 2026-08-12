@@ -61,10 +61,10 @@ func (c *Client) ListApplications() ([]Application, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		return nil, errors.New("unauthenticated: invalid or missing token (401)")
+		return nil, errors.New("ᴜɴᴀᴜᴛʜᴇɴᴛɪᴄᴀᴛᴇᴅ: ɪɴᴠᴀʟɪᴅ ᴏʀ ᴍɪꜱꜱɪɴɢ ᴛᴏᴋᴇɴ (401)")
 	}
 	if resp.StatusCode == http.StatusBadRequest {
-		return nil, errors.New("invalid token (400)")
+		return nil, errors.New("ɪɴᴠᴀʟɪᴅ ᴛᴏᴋᴇɴ (400)")
 	}
 
 	var apps []Application
@@ -104,13 +104,13 @@ func (c *Client) GetApplicationByUUID(uuid string) (*ApplicationDetail, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		return nil, errors.New("unauthenticated: invalid or missing token (401)")
+		return nil, errors.New("ᴜɴᴀᴜᴛʜᴇɴᴛɪᴄᴀᴛᴇᴅ: ɪɴᴠᴀʟɪᴅ ᴏʀ ᴍɪꜱꜱɪɴɢ ᴛᴏᴋᴇɴ (401)")
 	}
 	if resp.StatusCode == http.StatusBadRequest {
-		return nil, errors.New("invalid token (400)")
+		return nil, errors.New("ɪɴᴠᴀʟɪᴅ ᴛᴏᴋᴇɴ (400)")
 	}
 	if resp.StatusCode == http.StatusNotFound {
-		return nil, errors.New("application not found")
+		return nil, errors.New("ᴀᴘᴘʟɪᴄᴀᴛɪᴏɴ ɴᴏᴛ ꜰᴏᴜɴᴅ")
 	}
 
 	var app ApplicationDetail
@@ -143,16 +143,16 @@ func (c *Client) DeleteApplicationByUUID(uuid string) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		return errors.New("unauthenticated: invalid or missing token (401)")
+		return errors.New("ᴜɴᴀᴜᴛʜᴇɴᴛɪᴄᴀᴛᴇᴅ: ɪɴᴠᴀʟɪᴅ ᴏʀ ᴍɪꜱꜱɪɴɢ ᴛᴏᴋᴇɴ (401)")
 	}
 	if resp.StatusCode == http.StatusBadRequest {
-		return errors.New("invalid token (400)")
+		return errors.New("ɪɴᴠᴀʟɪᴅ ᴛᴏᴋᴇɴ (400)")
 	}
 	if resp.StatusCode == http.StatusNotFound {
-		return errors.New("application not found")
+		return errors.New("ᴀᴘᴘʟɪᴄᴀᴛɪᴏɴ ɴᴏᴛ ꜰᴏᴜɴᴅ")
 	}
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusNoContent {
-		return fmt.Errorf("unexpected response: %s", resp.Status)
+		return fmt.Errorf("ᴜɴᴇxᴘᴇᴄᴛᴇᴅ ʀᴇꜱᴘᴏɴꜱᴇ: %s", resp.Status)
 	}
 
 	// Clear relevant cache entries
@@ -188,13 +188,13 @@ func (c *Client) GetApplicationLogsByUUID(uuid string) (string, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		return "", errors.New("unauthenticated: invalid or missing token (401)")
+		return "", errors.New("ᴜɴᴀᴜᴛʜᴇɴᴛɪᴄᴀᴛᴇᴅ: ɪɴᴠᴀʟɪᴅ ᴏʀ ᴍɪꜱꜱɪɴɢ ᴛᴏᴋᴇɴ (401)")
 	}
 	if resp.StatusCode == http.StatusBadRequest {
-		return "", errors.New("invalid token (400)")
+		return "", errors.New("ɪɴᴠᴀʟɪᴅ ᴛᴏᴋᴇɴ (400)")
 	}
 	if resp.StatusCode == http.StatusNotFound {
-		return "", errors.New("application logs not found")
+		return "", errors.New("ᴀᴘᴘʟɪᴄᴀᴛɪᴏɴ ʟᴏɢꜱ ɴᴏᴛ ꜰᴏᴜɴᴅ")
 	}
 
 	var logs ApplicationLogs
@@ -228,13 +228,13 @@ func (c *Client) GetApplicationEnvsByUUID(uuid string) ([]EnvironmentVariable, e
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		return nil, errors.New("unauthenticated: invalid or missing token (401)")
+		return nil, errors.New("ᴜɴᴀᴜᴛʜᴇɴᴛɪᴄᴀᴛᴇᴅ: ɪɴᴠᴀʟɪᴅ ᴏʀ ᴍɪꜱꜱɪɴɢ ᴛᴏᴋᴇɴ (401)")
 	}
 	if resp.StatusCode == http.StatusBadRequest {
-		return nil, errors.New("invalid token (400)")
+		return nil, errors.New("ɪɴᴠᴀʟɪᴅ ᴛᴏᴋᴇɴ (400)")
 	}
 	if resp.StatusCode == http.StatusNotFound {
-		return nil, errors.New("application environment variables not found")
+		return nil, errors.New("ᴀᴘᴘʟɪᴄᴀᴛɪᴏɴ ᴇɴᴠɪʀᴏɴᴍᴇɴᴛ ᴠᴀʀɪᴀʙʟᴇꜱ ɴᴏᴛ ꜰᴏᴜɴᴅ")
 	}
 
 	var envs []EnvironmentVariable
@@ -283,13 +283,13 @@ func (c *Client) StartApplicationDeployment(uuid string, force, instantDeploy bo
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		return nil, errors.New("unauthenticated: invalid or missing token (401)")
+		return nil, errors.New("ᴜɴᴀᴜᴛʜᴇɴᴛɪᴄᴀᴛᴇᴅ: ɪɴᴠᴀʟɪᴅ ᴏʀ ᴍɪꜱꜱɪɴɢ ᴛᴏᴋᴇɴ (401)")
 	}
 	if resp.StatusCode == http.StatusBadRequest {
-		return nil, errors.New("invalid token (400)")
+		return nil, errors.New("ɪɴᴠᴀʟɪᴅ ᴛᴏᴋᴇɴ (400)")
 	}
 	if resp.StatusCode == http.StatusNotFound {
-		return nil, errors.New("application not found")
+		return nil, errors.New("ᴀᴘᴘʟɪᴄᴀᴛɪᴏɴ ɴᴏᴛ ꜰᴏᴜɴᴅ")
 	}
 
 	var deployment StartDeploymentResponse
@@ -330,13 +330,13 @@ func (c *Client) StopApplicationByUUID(uuid string) (*StopApplicationResponse, e
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		return nil, errors.New("unauthenticated: invalid or missing token (401)")
+		return nil, errors.New("ᴜɴᴀᴜᴛʜᴇɴᴛɪᴄᴀᴛᴇᴅ: ɪɴᴠᴀʟɪᴅ ᴏʀ ᴍɪꜱꜱɪɴɢ ᴛᴏᴋᴇɴ (401)")
 	}
 	if resp.StatusCode == http.StatusBadRequest {
-		return nil, errors.New("invalid token (400)")
+		return nil, errors.New("ɪɴᴠᴀʟɪᴅ ᴛᴏᴋᴇɴ (400)")
 	}
 	if resp.StatusCode == http.StatusNotFound {
-		return nil, errors.New("application not found")
+		return nil, errors.New("ᴀᴘᴘʟɪᴄᴀᴛɪᴏɴ ɴᴏᴛ ꜰᴏᴜɴᴅ")
 	}
 
 	var stopResponse StopApplicationResponse
@@ -377,13 +377,13 @@ func (c *Client) RestartApplicationByUUID(uuid string) (*StartDeploymentResponse
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		return nil, errors.New("unauthenticated: invalid or missing token (401)")
+		return nil, errors.New("ᴜɴᴀᴜᴛʜᴇɴᴛɪᴄᴀᴛᴇᴅ: ɪɴᴠᴀʟɪᴅ ᴏʀ ᴍɪꜱꜱɪɴɢ ᴛᴏᴋᴇɴ (401)")
 	}
 	if resp.StatusCode == http.StatusBadRequest {
-		return nil, errors.New("invalid token (400)")
+		return nil, errors.New("ɪɴᴠᴀʟɪᴅ ᴛᴏᴋᴇɴ (400)")
 	}
 	if resp.StatusCode == http.StatusNotFound {
-		return nil, errors.New("application not found")
+		return nil, errors.New("ᴀᴘᴘʟɪᴄᴀᴛɪᴏɴ ɴᴏᴛ ꜰᴏᴜɴᴅ")
 	}
 
 	var deployment StartDeploymentResponse
