@@ -12,7 +12,7 @@ import (
 
 func unscheduleHandler(c *td.Client, msg *td.Message) error {
 	if !config.IsDev(msg.SenderID()) {
-		_, err := msg.ReplyText(c, "🚫 You are not authorized to use this command.", nil)
+		_, err := msg.ReplyText(c, "🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴛᴏ ᴜꜱᴇ ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ.", nil)
 		return err
 	}
 
@@ -24,14 +24,14 @@ func unscheduleHandler(c *td.Client, msg *td.Message) error {
 	taskID := args[1]
 
 	if err := scheduler.RemoveTask(taskID); err != nil {
-		_, err = msg.ReplyText(c, fmt.Sprintf("⚠️ Warning: Could not remove task from scheduler (might not be running): %v", err), nil)
+		_, err = msg.ReplyText(c, fmt.Sprintf("⚠️ ᴡᴀʀɴɪɴɢ: ᴄᴏᴜʟᴅ ɴᴏᴛ ʀᴇᴍᴏᴠᴇ ᴛᴀꜱᴋ ꜰʀᴏᴍ ꜱᴄʜᴇᴅᴜʟᴇʀ (ᴍɪɢʜᴛ ɴᴏᴛ ʙᴇ ʀᴜɴɴɪɴɢ): %v", err), nil)
 	}
 
 	if err := database.DeleteTask(taskID); err != nil {
-		_, err = msg.ReplyText(c, fmt.Sprintf("❌ Error deleting task from database: %v", err), nil)
+		_, err = msg.ReplyText(c, fmt.Sprintf("❌ ᴇʀʀᴏʀ ᴅᴇʟᴇᴛɪɴɢ ᴛᴀꜱᴋ ꜰʀᴏᴍ ᴅᴀᴛᴀʙᴀꜱᴇ: %v", err), nil)
 		return err
 	}
 
-	_, err := msg.ReplyText(c, fmt.Sprintf("✅ Task <code>%s</code> removed successfully.", taskID), &td.SendTextMessageOpts{ParseMode: "HTML"})
+	_, err := msg.ReplyText(c, fmt.Sprintf("✅ ᴛᴀꜱᴋ <code>%s</code> ʀᴇᴍᴏᴠᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ.", taskID), &td.SendTextMessageOpts{ParseMode: "HTML"})
 	return err
 }
