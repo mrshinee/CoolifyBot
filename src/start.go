@@ -9,13 +9,23 @@ import (
 )
 
 func startHandler(c *td.Client, msg *td.Message) error {
+	sender, err := msg.GetUser(c)
+	if err != nil {
+		return fmt.Errorf("failed to get sender: %w", err)
+	}
+
+	firstName := "there"
+	if sender != nil {
+		firstName = sender.FirstName
+	}
+
 	response := fmt.Sprintf(`🌟 <b>ʜᴇʏ, %s!</b>
 
 ʏᴏᴜ'ᴠᴇ ʀᴇᴀᴄʜᴇᴅ <b>%s</b> — ʏᴏᴜʀ ꜱᴍᴀʀᴛ ᴄᴏɴᴛʀᴏʟ ᴘᴀɴᴇʟ ꜰᴏʀ ᴍᴀɴᴀɢɪɴɢ <b>ᴄᴏᴏʟɪꜰʏ</b> ᴘʀᴏᴊᴇᴄᴛꜱ ᴅɪʀᴇᴄᴛʟʏ ꜰʀᴏᴍ ᴛᴇʟᴇɢʀᴀᴍ.
 
 <blockquote>⚡ ᴅᴇᴘʟᴏʏ · 🔄 ʀᴇꜱᴛᴀʀᴛ · 📋 ᴍᴀɴᴀɢᴇ — ᴀʟʟ ɪɴ ᴏɴᴇ ᴘʟᴀᴄᴇ.</blockquote>
 
-ᴛᴀᴘ ᴛʜᴇ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ ᴛᴏ ɢᴇᴛ ꜱᴛᴀʀᴛᴇᴅ 👇`, msg.Sender.FirstName, c.Me.FirstName)
+ᴛᴀᴘ ᴛʜᴇ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ ᴛᴏ ɢᴇᴛ ꜱᴛᴀʀᴛᴇᴅ 👇`, firstName, c.Me.FirstName)
 
 	kb := &td.ReplyMarkupInlineKeyboard{
 		Rows: [][]td.InlineKeyboardButton{
@@ -44,7 +54,7 @@ func startHandler(c *td.Client, msg *td.Message) error {
 		},
 	}
 
-	_, err := msg.ReplyText(c, response, &td.SendTextMessageOpts{ParseMode: "HTML", ReplyMarkup: kb})
+	_, err = msg.ReplyText(c, response, &td.SendTextMessageOpts{ParseMode: "HTML", ReplyMarkup: kb})
 	if err != nil {
 		return fmt.Errorf("failed to send start message: %w", err)
 	}
