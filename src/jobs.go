@@ -13,7 +13,7 @@ const pageSize = 5
 
 func jobsHandler(c *td.Client, msg *td.Message) error {
 	if !config.IsDev(msg.SenderID()) {
-		_, err := msg.ReplyText(c, "🚫 You are not authorized to use this command.", nil)
+		_, err := msg.ReplyText(c, "🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴛᴏ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ.", nil)
 		return err
 	}
 
@@ -30,7 +30,7 @@ func jobsHandler(c *td.Client, msg *td.Message) error {
 func jobsPaginationHandler(c *td.Client, cb *td.UpdateNewCallbackQuery) error {
 	data := cb.DataString()
 	if !config.IsDev(cb.SenderUserId) {
-		_ = cb.Answer(c, 0, true, "🚫 You are not authorized.", "")
+		_ = cb.Answer(c, 0, true, "🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", "")
 		return nil
 	}
 
@@ -56,21 +56,21 @@ func buildJobsMessage(page int) (string, td.ReplyMarkup, error) {
 	}
 
 	if len(tasks) == 0 {
-		return "📭 No scheduled jobs found.", nil, nil
+		return "📭 ɴᴏ sᴄʜᴇᴅᴜʟᴇᴅ ᴊᴏʙs ғᴏᴜɴᴅ.", nil, nil
 	}
 
 	start, end, buttons := Paginate(len(tasks), page, pageSize, "jobs:")
 
 	var sb strings.Builder
-	sb.WriteString(fmt.Sprintf("<b>📅 Scheduled Jobs (Page %d):</b>\n\n", page))
+	sb.WriteString(fmt.Sprintf("<b>📅 sᴄʜᴇᴅᴜʟᴇᴅ ᴊᴏʙs (Page %d):</b>\n\n", page))
 
 	for _, task := range tasks[start:end] {
 		sb.WriteString(fmt.Sprintf("🆔 <code>%s</code>\n", task.ID.Hex()))
-		sb.WriteString(fmt.Sprintf("🏷️ <b>Name:</b> %s\n", task.Name))
-		sb.WriteString(fmt.Sprintf("🔧 <b>Type:</b> %s\n", task.Type))
-		sb.WriteString(fmt.Sprintf("⏰ <b>Schedule:</b> %s\n", task.Schedule))
+		sb.WriteString(fmt.Sprintf("🏷️ <b>ɴᴀᴍᴇ:</b> %s\n", task.Name))
+		sb.WriteString(fmt.Sprintf("🔧 <b>ᴛʏᴘᴇ:</b> %s\n", task.Type))
+		sb.WriteString(fmt.Sprintf("⏰ <b>sᴄʜᴇᴅᴜʟᴇ:</b> %s\n", task.Schedule))
 		if task.OneTime {
-			sb.WriteString(fmt.Sprintf("⏳ <b>Next Run:</b> %s\n", task.NextRun.Format("2006-01-02 15:04:05")))
+			sb.WriteString(fmt.Sprintf("⏳ <b>ɴᴇxᴛ ʀᴜɴ:</b> %s\n", task.NextRun.Format("2006-01-02 15:04:05")))
 		}
 		sb.WriteString("➖➖➖➖➖➖➖➖➖➖\n")
 	}
