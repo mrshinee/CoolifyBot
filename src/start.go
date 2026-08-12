@@ -9,31 +9,35 @@ import (
 )
 
 func startHandler(c *td.Client, msg *td.Message) error {
-	response := fmt.Sprintf(`
-Welcome to <b>%s</b> — your assistant to manage Coolify projects.
-`, c.Me.FirstName)
+	response := fmt.Sprintf(`🌟 <b>ʜᴇʏ, %s!</b>
+
+ʏᴏᴜ'ᴠᴇ ʀᴇᴀᴄʜᴇᴅ <b>%s</b> — ʏᴏᴜʀ ꜱᴍᴀʀᴛ ᴄᴏɴᴛʀᴏʟ ᴘᴀɴᴇʟ ꜰᴏʀ ᴍᴀɴᴀɢɪɴɢ <b>ᴄᴏᴏʟɪꜰʏ</b> ᴘʀᴏᴊᴇᴄᴛꜱ ᴅɪʀᴇᴄᴛʟʏ ꜰʀᴏᴍ ᴛᴇʟᴇɢʀᴀᴍ.
+
+<blockquote>⚡ ᴅᴇᴘʟᴏʏ · 🔄 ʀᴇꜱᴛᴀʀᴛ · 📋 ᴍᴀɴᴀɢᴇ — ᴀʟʟ ɪɴ ᴏɴᴇ ᴘʟᴀᴄᴇ.</blockquote>
+
+ᴛᴀᴘ ᴛʜᴇ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ ᴛᴏ ɢᴇᴛ ꜱᴛᴀʀᴛᴇᴅ 👇`, msg.Sender.FirstName, c.Me.FirstName)
 
 	kb := &td.ReplyMarkupInlineKeyboard{
 		Rows: [][]td.InlineKeyboardButton{
 			{
 				{
-					Text: "📋 List Projects",
+					Text: "📋 ʟɪꜱᴛ ᴘʀᴏᴊᴇᴄᴛꜱ",
 					Type: &td.InlineKeyboardButtonTypeCallback{
 						Data: []byte("list_projects"),
-					},
-				},
-				{
-					Text: "💫 Fᴀʟʟᴇɴ Pʀᴏᴊᴇᴄᴛꜱ",
-					Type: &td.InlineKeyboardButtonTypeUrl{
-						Url: "https://t.me/FallenProjects",
 					},
 				},
 			},
 			{
 				{
-					Text: "🛠 Sᴏᴜʀᴄᴇ Cᴏᴅᴇ",
+					Text: "💫 Uᴘᴅᴀᴛᴇs",
 					Type: &td.InlineKeyboardButtonTypeUrl{
-						Url: "https://github.com/AshokShau/coolify-telegram-bot",
+						Url: "https://t.me/DynamicXNetwork",
+					},
+				},
+				{
+					Text: "🛠 Mᴀɪɴᴛᴀɪɴᴇʀ",
+					Type: &td.InlineKeyboardButtonTypeUrl{
+						Url: "https://t.me/NullXShadow",
 					},
 				},
 			},
@@ -49,7 +53,7 @@ Welcome to <b>%s</b> — your assistant to manage Coolify projects.
 
 func pingHandler(c *td.Client, msg *td.Message) error {
 	start := time.Now()
-	msg, err := msg.ReplyText(c, "⏱️ Pinging...", nil)
+	sentMsg, err := msg.ReplyText(c, "⏱️ ᴘɪɴɢɪɴɢ...", nil)
 	if err != nil {
 		return fmt.Errorf("failed to send ping message: %w", err)
 	}
@@ -58,14 +62,15 @@ func pingHandler(c *td.Client, msg *td.Message) error {
 	uptime := time.Since(startTime).Truncate(time.Second)
 
 	response := fmt.Sprintf(
-		"<b>📊 System Performance Metrics</b>\n\n"+
-			"⏱️ <b>Bot Latency:</b> <code>%d ms</code>\n"+
-			"🕒 <b>Uptime:</b> <code>%s</code>\n"+
-			"⚙️ <b>Go Routines:</b> <code>%d</code>\n",
+		"<b>📊 ꜱʏꜱᴛᴇᴍ ᴘᴇʀꜰᴏʀᴍᴀɴᴄᴇ ᴍᴇᴛʀɪᴄꜱ</b>\n\n"+
+			"⏱️ <b>ʙᴏᴛ ʟᴀᴛᴇɴᴄʏ:</b> <code>%d ms</code>\n"+
+			"🕒 <b>ᴜᴘᴛɪᴍᴇ:</b> <code>%s</code>\n"+
+			"📩 <b>ᴜᴘᴅᴀᴛᴇ ʟᴀɢ:</b> <code>%d ms</code>\n"+
+			"⚙️ <b>ɢᴏ ʀᴏᴜᴛɪɴᴇꜱ:</b> <code>%d</code>\n",
 		latency, uptime, runtime.NumGoroutine(),
 	)
 
-	_, err = msg.EditText(c, response, &td.EditTextMessageOpts{ParseMode: "HTML"})
+	_, err = sentMsg.EditText(c, response, &td.EditTextMessageOpts{ParseMode: "HTML"})
 	if err != nil {
 		return fmt.Errorf("failed to edit ping message: %w", err)
 	}
