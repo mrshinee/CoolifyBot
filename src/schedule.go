@@ -32,7 +32,7 @@ func scheduleHandler(c *td.Client, msg *td.Message) error {
 
 	apps, err := config.Coolify.ListApplications()
 	if err != nil {
-		_, err = msg.ReplyText(c, fmt.Sprintf("❌ Error fetching projects: %v", err), nil)
+		_, err = msg.ReplyText(c, fmt.Sprintf("❌ ᴇʀʀᴏʀ ꜰᴇᴛᴄʜɪɴɢ ᴘʀᴏᴊᴇᴄᴛꜱ: %v", err), nil)
 		return err
 	}
 
@@ -45,7 +45,7 @@ func scheduleHandler(c *td.Client, msg *td.Message) error {
 	}
 
 	if uuid == "" {
-		_, err = msg.ReplyText(c, fmt.Sprintf("❌ Project not found with name: %s", name), nil)
+		_, err = msg.ReplyText(c, fmt.Sprintf("❌ ᴘʀᴏᴊᴇᴄᴛ ɴᴏᴛ ꜰᴏᴜɴᴅ ᴡɪᴛʜ ɴᴀᴍᴇ: %s", name), nil)
 		return err
 	}
 
@@ -59,18 +59,18 @@ func scheduleHandler(c *td.Client, msg *td.Message) error {
 	switch schType {
 	case "one_time":
 		if len(args) < 4 {
-			_, err = msg.ReplyText(c, "❌ Please provide a time for one-time schedule.", nil)
+			_, err = msg.ReplyText(c, "❌ ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴛɪᴍᴇ ꜰᴏʀ ᴏɴᴇ-ᴛɪᴍᴇ ꜱᴄʜᴇᴅᴜʟᴇ.", nil)
 			return err
 		}
 		timeStr := args[3]
 		t, err := time.Parse(time.RFC3339, timeStr)
 		if err != nil {
-			_, err = msg.ReplyText(c, "❌ Invalid time format. Use RFC3339 (e.g., 2023-10-27T10:00:00Z)", nil)
+			_, err = msg.ReplyText(c, "❌ ɪɴᴠᴀʟɪᴅ ᴛɪᴍᴇ ꜰᴏʀᴍᴀᴛ. ᴜꜱᴇ RFC3339 (e.g., 2023-10-27T10:00:00Z)", nil)
 			return err
 		}
 
 		if t.Before(time.Now()) {
-			_, err = msg.ReplyText(c, "❌ Time must be in the future.", nil)
+			_, err = msg.ReplyText(c, "❌ ᴛɪᴍᴇ ᴍᴜꜱᴛ ʙᴇ ɪɴ ᴛʜᴇ ꜰᴜᴛᴜʀᴇ.", nil)
 			return err
 		}
 
@@ -80,7 +80,7 @@ func scheduleHandler(c *td.Client, msg *td.Message) error {
 
 	case "cron":
 		if len(args) < 4 {
-			_, err = msg.ReplyText(c, "❌ Please provide a cron expression.", nil)
+			_, err = msg.ReplyText(c, "❌ ᴘʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴄʀᴏɴ ᴇxᴘʀᴇssɪᴏɴ.", nil)
 			return err
 		}
 
@@ -97,7 +97,7 @@ func scheduleHandler(c *td.Client, msg *td.Message) error {
 			if _, err := time.Parse("15:04", timeStr); err == nil {
 				task.Schedule = "daily_at_" + timeStr
 			} else {
-				_, err = msg.ReplyText(c, "❌ Invalid time format. Use HH:MM (e.g., 06:00)", nil)
+				_, err = msg.ReplyText(c, "❌ ɪɴᴠᴀʟɪᴅ ᴛɪᴍᴇ ғᴏʀᴍᴀᴛ. ᴜsᴇ HH:MM (e.g., 06:00)", nil)
 				return err
 			}
 		} else {
@@ -111,7 +111,7 @@ func scheduleHandler(c *td.Client, msg *td.Message) error {
 				base := parts[0]
 				timeStr := parts[1]
 				if _, err := time.Parse("15:04", timeStr); err != nil {
-					_, err = msg.ReplyText(c, "❌ Invalid time format in schedule. Use HH:MM (e.g., every_1d_at_06:00)", nil)
+					_, err = msg.ReplyText(c, "❌ ɪɴᴠᴀʟɪᴅ ᴛɪᴍᴇ ғᴏʀᴍᴀᴛ ɪɴ sᴄʜᴇᴅᴜʟᴇ. ᴜsᴇ HH:MM (e.g., every_1d_at_06:00)", nil)
 					return err
 				}
 
@@ -159,21 +159,21 @@ func scheduleHandler(c *td.Client, msg *td.Message) error {
 			break
 		}
 
-		_, err = msg.ReplyText(c, fmt.Sprintf("❌ Unknown schedule type: %s", schType), nil)
+		_, err = msg.ReplyText(c, fmt.Sprintf("❌ ᴜɴᴋɴᴏᴡɴ sᴄʜᴇᴅᴜʟᴇ ᴛʏᴘᴇ: %s", schType), nil)
 		return err
 	}
 
 	if err := database.AddTask(task); err != nil {
-		_, err = msg.ReplyText(c, fmt.Sprintf("❌ Error saving task: %v", err), nil)
+		_, err = msg.ReplyText(c, fmt.Sprintf("❌ ᴇʀʀᴏʀ sᴀᴠɪɴɢ ᴛᴀsᴋ: %v", err), nil)
 		return err
 	}
 
 	if err := scheduler.ScheduleTask(task); err != nil {
 		_ = database.DeleteTask(task.ID.Hex())
-		_, err = msg.ReplyText(c, fmt.Sprintf("❌ Error scheduling task: %v", err), nil)
+		_, err = msg.ReplyText(c, fmt.Sprintf("❌ ᴇʀʀᴏʀ sᴄʜᴇᴅᴜʟɪɴɢ ᴛᴀsᴋ: %v", err), nil)
 		return err
 	}
 
-	_, err = msg.ReplyText(c, fmt.Sprintf("✅ Task scheduled successfully!\nID: %s", task.ID.Hex()), nil)
+	_, err = msg.ReplyText(c, fmt.Sprintf("✅ ᴛᴀsᴋ sᴄʜᴇᴅᴜʟᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ!\nID: %s", task.ID.Hex()), nil)
 	return err
 }
