@@ -29,6 +29,16 @@ type Client struct {
 	cache   *cache
 }
 
+// InvalidateApplicationsCache clears the cached applications list so the
+// next ListApplications call fetches fresh data from Coolify instead of
+// serving a stale list (e.g. after an app was deleted/recreated outside
+// the bot and still shows up with an old UUID until the cache TTL expires).
+func (c *Client) InvalidateApplicationsCache() {
+	if c.cache != nil {
+		c.cache.Delete("applications")
+	}
+}
+
 func (c *Client) ListApplications() ([]Application, error) {
 	// Check cache first
 	if c.cache != nil {

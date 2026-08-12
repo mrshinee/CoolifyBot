@@ -37,6 +37,9 @@ func listProjectsHandler(cb *telegram.CallbackQuery) error {
 			fmt.Sscanf(parts[1], "%d", &page)
 		}
 	}
+	if page < 1 {
+		page = 1
+	}
 
 	start, end, paginationButtons := Paginate(len(apps), page, 7, "list_projects:")
 	kb := telegram.NewKeyboard()
@@ -54,8 +57,23 @@ func listProjectsHandler(cb *telegram.CallbackQuery) error {
 		kb.AddRow(row...)
 	}
 
+	kb.AddRow(telegram.Button.Data("🔄 ʀᴇꜰʀᴇꜱʜ", "refresh_projects:"))
+
 	_, err = cb.Edit("<b>📋 ꜱᴇʟᴇᴄᴛ ᴀ ᴘʀᴏᴊᴇᴄᴛ:</b>", &telegram.SendOptions{ReplyMarkup: kb.Build()})
 	return err
+}
+
+// refreshProjectsHandler clears the cached applications list and re-renders
+// the project menu, so a deleted/recreated app doesn't keep showing up
+// with a stale UUID for the rest of the 30-minute cache window.
+func refreshProjectsHandler(cb *telegram.CallbackQuery) error {
+	if !config.IsDev(cb.SenderID) {
+		_, _ = cb.Answer("🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ.", &telegram.CallbackOptions{Alert: true})
+		return nil
+	}
+	config.Coolify.InvalidateApplicationsCache()
+	_, _ = cb.Answer("🔄 ʀᴇꜰʀᴇꜱʜᴇᴅ")
+	return listProjectsHandler(cb)
 }
 
 func projectMenuHandler(cb *telegram.CallbackQuery) error {
@@ -69,7 +87,7 @@ func projectMenuHandler(cb *telegram.CallbackQuery) error {
 
 	app, err := config.Coolify.GetApplicationByUUID(uuid)
 	if err != nil {
-		_, err = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ʟᴏᴀᴅ ᴘʀᴏᴊᴇᴄᴛ: "+err.Error(), nil)
+		_, err = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ʟᴏᴀᴅ ᴘʀᴏᴊᴇᴄᴛ: " + err.Error())
 		return err
 	}
 
@@ -150,13 +168,13 @@ func logsHandler(cb *telegram.CallbackQuery) error {
 
 	tmpFile, err := os.CreateTemp("", "logs-*.txt")
 	if err != nil {
-		_, _ = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ᴄʀᴇᴀᴛᴇ ᴛᴇᴍᴘ ꜰɪʟᴇ: "+err.Error(), nil)
+		_, _ = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ᴄʀᴇᴀᴛᴇ ᴛᴇᴍᴘ ꜰɪʟᴇ: " + err.Error())
 		return err
 	}
 
 	defer os.Remove(tmpFile.Name())
 	if _, err := tmpFile.Write([]byte(logsData)); err != nil {
-		_, _ = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ᴡʀɪᴛᴇ ʟᴏɢꜱ: "+err.Error(), nil)
+		_, _ = cb.Edit("❌ ꜰᴀɪʟᴇᴅ ᴛᴏ ᴡʀɪᴛᴇ ʟᴏɢꜱ: " + err.Error())
 		return err
 	}
 	tmpFile.Close()

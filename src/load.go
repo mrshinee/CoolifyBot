@@ -33,6 +33,7 @@ func InitFunc(c *telegram.Client) error {
 	c.On("callback:jobs:", jobsPaginationHandler)
 	c.On("callback:list_projects", listProjectsHandler)
 	c.On("callback:list_projects:", listProjectsHandler)
+	c.On("callback:refresh_projects:", refreshProjectsHandler)
 	c.On("callback:project_menu:", projectMenuHandler)
 	c.On("callback:sch_m:", scheduleMenuHandler)
 	c.On("callback:sch_a:", scheduleActionHandler)
