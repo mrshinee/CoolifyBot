@@ -182,7 +182,7 @@ func logsHandler(cb *telegram.CallbackQuery) error {
 	opts := telegram.SendOptions{
 		Upload: &telegram.UploadOptions{
 			ProgressCallback: func(pi *telegram.ProgressInfo) {
-				msg.Edit(fmt.Sprintf("Uploading... %.2f%% complete (%.2f MB/s), ETA: %.2f seconds",
+				msg.Edit(fmt.Sprintf("ᴜᴘʟᴏᴀᴅɪɴɢ... %.2f%% ᴄᴏᴍᴘʟᴇᴛᴇ (%.2f MB/s), ᴇᴛᴀ: %.2f ꜱᴇᴄᴏɴᴅꜱ",
 					pi.Percentage,
 					pi.CurrentSpeed/1024/1024,
 					pi.ETA,

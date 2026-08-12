@@ -21,9 +21,9 @@ func scheduleHandler(m *telegram.NewMessage) error {
 
 	args := strings.Fields(m.Text())
 	if len(args) < 3 {
-		_, err := m.Reply("usage: /schedule <name> <schedule_type> [expression/time]\n" +
-			"Types: one_time, every_minute, hourly, daily, weekly, monthly, yearly, cron\n" +
-			"For one_time, use RFC3339 format (e.g., 2023-10-27T10:00:00Z)")
+		_, err := m.Reply("ᴜꜱᴀɢᴇ: /schedule <name> <schedule_type> [expression/time]\n" +
+			"ᴛʏᴘᴇꜱ: one_time, every_minute, hourly, daily, weekly, monthly, yearly, cron\n" +
+			"ꜰᴏʀ one_time, ᴜꜱᴇ RFC3339 ꜰᴏʀᴍᴀᴛ (e.g., 2023-10-27T10:00:00Z)")
 		return err
 	}
 
