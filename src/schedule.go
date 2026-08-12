@@ -15,15 +15,15 @@ import (
 
 func scheduleHandler(c *td.Client, msg *td.Message) error {
 	if !config.IsDev(msg.SenderID()) {
-		_, err := msg.ReplyText(c, "🚫 You are not authorized to use this command.", nil)
+		_, err := msg.ReplyText(c, "🚫 ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀᴜᴛʜᴏʀɪᴢᴇᴅ ᴛᴏ ᴜꜱᴇ ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ.", nil)
 		return err
 	}
 
 	args := strings.Fields(msg.Text())
 	if len(args) < 3 {
-		_, err := msg.ReplyText(c, "usage: /schedule <name> <schedule_type> [expression/time]\n"+
-			"Types: one_time, every_minute, hourly, daily, weekly, monthly, yearly, cron\n"+
-			"For one_time, use RFC3339 format (e.g., 2023-10-27T10:00:00Z)", &td.SendTextMessageOpts{ParseMode: ""})
+		_, err := msg.ReplyText(c, "ᴜꜱᴀɢᴇ: /schedule <name> <schedule_type> [expression/time]\n"+
+			"ᴛʏᴘᴇꜱ: one_time, every_minute, hourly, daily, weekly, monthly, yearly, cron\n"+
+			"ꜰᴏʀ one_time, ᴜꜱᴇ RFC3339 ꜰᴏʀᴍᴀᴛ (e.g., 2023-10-27T10:00:00Z)", &td.SendTextMessageOpts{ParseMode: ""})
 		return err
 	}
 
