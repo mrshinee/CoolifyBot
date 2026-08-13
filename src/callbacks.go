@@ -192,7 +192,12 @@ func restartHandler(c *td.Client, cb *td.UpdateNewCallbackQuery) error {
 		return nil
 	}
 
-	text := fmt.Sprintf("✅ ʀᴇꜱᴛᴀʀᴛ ǫᴜᴇᴜᴇᴅ!\nᴅᴇᴘʟᴏʏᴍᴇɴᴛ ᴜᴜɪᴅ: <code>%s</code>", res.DeploymentUUID)
+	text := "✅ ʀᴇꜱᴛᴀʀᴛ ǫᴜᴇᴜᴇᴅ!"
+	if res.DeploymentUUID != "" {
+		text += fmt.Sprintf("\nᴅᴇᴘʟᴏʏᴍᴇɴᴛ ᴜᴜɪᴅ: <code>%s</code>", res.DeploymentUUID)
+	} else if res.Message != "" {
+		text += fmt.Sprintf("\n%s", res.Message)
+	}
 	_, err = cb.EditMessageText(c, text, &td.EditTextMessageOpts{ParseMode: "HTML", ReplyMarkup: kb})
 	return err
 }

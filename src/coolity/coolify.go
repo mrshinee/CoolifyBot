@@ -344,7 +344,8 @@ func (c *Client) RestartApplicationByUUID(uuid string) (*StartDeploymentResponse
 	cacheKey := fmt.Sprintf("app_restart_%s", uuid)
 	if c.cache != nil {
 		if cached, found := c.cache.Get(cacheKey); found {
-			return new(cached.(StartDeploymentResponse)), nil
+			d := cached.(StartDeploymentResponse)
+			return &d, nil
 		}
 	}
 
